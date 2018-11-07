@@ -23,13 +23,9 @@ from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import qmlRegisterType
 from PyQt5.QtQuick import QQuickView
 
-from backend_qtquick5 import FigureCanvasQTAgg
+from backend_qquick5agg import FigureCanvasQTAgg
 
 import matplotlib
-# matplotlib.use('module://backend_qtquick5')
-# from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-# from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
 import numpy as np       
@@ -45,7 +41,7 @@ def main():
     
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
-    view.setSource(QUrl('backend_qtquick5/Figure.qml'))
+    view.setSource(QUrl('Figure.qml'))
     view.show()
     
     win = view.rootObject()
