@@ -27,9 +27,8 @@ def main():
     main_window.show()
 
     fig = main_window.findChild(QObject, "figure").getFigure()
-    #    ax = fig.add_subplot(111)
-    #    x = np.linspace(-5, 5)
-    #    ax.plot(x, np.sin(x))
+    ax = fig.add_subplot(111)
+    ax.plot([1,2,3,4], [5,6,7,8])
 
     QTimer.singleShot(0, main_controller.startup)
     sys.exit(app.exec_())

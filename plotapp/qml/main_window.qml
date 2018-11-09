@@ -20,13 +20,6 @@ ApplicationWindow
         anchors.fill: parent
         spacing: 10
 
-//        Rectangle {
-//            id: placeholder
-//            color: 'red'
-//            Layout.fillHeight: true
-//            Layout.fillWidth: true
-//        }
-
         FigureCanvas {
                 id: mplView
                 objectName : "figure"
