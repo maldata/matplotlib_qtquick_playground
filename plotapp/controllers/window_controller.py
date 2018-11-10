@@ -11,6 +11,8 @@ class WindowController(QObject):
         self._app = app
         self._qml_engine = None
         self._label = 'whatever'
+        self._figure = None
+        self._ax = None
 
     def startup(self, qml_engine):
         print('Main controller startup')
@@ -21,9 +23,8 @@ class WindowController(QObject):
 
         # TODO: If we have other screens, we'd probably do this there. findChild() can be called on
         # any QML object that was loaded with the QMLEngine.load() method.
-        fig = main_window.findChild(QObject, "figure").getFigure()
-        ax = fig.add_subplot(111)
-        ax.plot([1,2,3,4], [5,6,7,8])
+        self._figure = main_window.findChild(QObject, "figure").getFigure()
+        self._ax = self._figure.add_subplot(111)
 
     @pyqtSlot()
     def shutdown(self):
@@ -36,5 +37,10 @@ class WindowController(QObject):
 
     @pyqtSlot()
     def generate_data(self):
-        data = [random.random() for i in range(10)]
-        print(data)
+        x = [random.random() for i in range(10)]
+        x.sort()
+        y = [random.random() for i in range(10)]
+
+        self._ax.clear()
+        self._ax.plot(x, y)
+        self._figure.canvas.draw_idle()

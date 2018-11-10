@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSlot
 
 
-class BaseController(QObject):
+class BaseScreenController(QObject):
     def __init__(self, app):
         super().__init__()
 
