@@ -6,11 +6,11 @@ from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PyQt5.QtGui import QGuiApplication
 
 from plotapp.controllers.window_controller import WindowController
-from plotapp.controllers.figure_controller import FigureCanvasQTAgg
+from plotapp.controllers.figure_controller import FigureCanvasQtQuickAgg
 
 
 def main():
-    qmlRegisterType(FigureCanvasQTAgg, "QtQuickFigureCanvas", 1, 0, "FigureCanvas")
+    qmlRegisterType(FigureCanvasQtQuickAgg, "QtQuickFigureCanvas", 1, 0, "FigureCanvas")
 
     app = QGuiApplication(sys.argv)
     qml_engine = QQmlApplicationEngine()
