@@ -2,7 +2,7 @@ import random
 from PyQt5.QtCore import pyqtSignal, pyqtProperty, pyqtSlot, QObject
 
 
-class MainController(QObject):
+class WindowController(QObject):
     label_changed = pyqtSignal()
 
     def __init__(self, app):

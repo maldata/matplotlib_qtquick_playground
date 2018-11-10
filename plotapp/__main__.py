@@ -1,11 +1,11 @@
 import sys
 import os.path
 
-from PyQt5.QtCore import QTimer, QObject
+from PyQt5.QtCore import QTimer
 from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PyQt5.QtGui import QGuiApplication
 
-from plotapp.controllers.main_controller import MainController
+from plotapp.controllers.window_controller import WindowController
 from plotapp.controllers.figure_controller import FigureCanvasQTAgg
 
 
@@ -15,7 +15,7 @@ def main():
     app = QGuiApplication(sys.argv)
     qml_engine = QQmlApplicationEngine()
 
-    main_controller = MainController(app)
+    main_controller = WindowController(app)
     context = qml_engine.rootContext()
     context.setContextProperty("main", main_controller)
 
