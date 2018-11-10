@@ -7,7 +7,7 @@ class BaseController(QObject):
 
         self._app = app
 
-    def startup(self):
+    def startup(self, qml_engine):
         pass
 
     @pyqtSlot()

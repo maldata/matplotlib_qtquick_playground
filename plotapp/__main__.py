@@ -23,14 +23,8 @@ def main():
     qml_path = os.path.join(this_directory, 'qml/main_window.qml')
     qml_engine.load(qml_path)
 
-    main_window = qml_engine.rootObjects()[0]
-    main_window.show()
+    QTimer.singleShot(0, lambda arg=qml_engine: main_controller.startup(arg))
 
-    fig = main_window.findChild(QObject, "figure").getFigure()
-    ax = fig.add_subplot(111)
-    ax.plot([1,2,3,4], [5,6,7,8])
-
-    QTimer.singleShot(0, main_controller.startup)
     sys.exit(app.exec_())
 
 
