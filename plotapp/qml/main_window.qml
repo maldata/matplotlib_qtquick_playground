@@ -27,10 +27,19 @@ ApplicationWindow
                 Layout.fillWidth: true
             }
 
-        Button {
-            id: generateButton
-            text: "Generate"
-            onClicked: main.generate_data()
-        }
-    }  // ColumnLayout
+	ColumnLayout {
+            Button {
+		id: generateButton
+		text: "Generate"
+		onClicked: main.generate_data()
+            }
+
+	    Button {
+		id: appendButton
+		text: "Append"
+		onClicked: main.append_data()
+            }
+	    
+	}  // ColumnLayout
+    }  // RowLayout
 }  // ApplicationWindow

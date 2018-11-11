@@ -14,6 +14,8 @@ class WindowController(QObject):
         self._figure = None
         self._ax = None
 
+        self._data = ([], [])
+
     def startup(self, qml_engine):
         print('Main controller startup')
         self._qml_engine = qml_engine
@@ -41,6 +43,28 @@ class WindowController(QObject):
         x.sort()
         y = [random.random() for i in range(10)]
 
+        self._data = (x, y)
+        
+        self._ax.clear()
+        self._ax.plot(x, y)
+        self._figure.canvas.draw_idle()
+
+    @pyqtSlot()
+    def append_data(self):
+        x = self._data[0]
+        y = self._data[1]
+        
+        x_offset = max(x) + 0.1
+        new_x = [random.random() + x_offset for i in range(10)]
+        new_x.sort()
+        
+        new_y = [random.random() for i in range(10)]
+        
+        x = x + new_x
+        y = y + new_y
+
+        self._data = (x, y)
+        
         self._ax.clear()
         self._ax.plot(x, y)
         self._figure.canvas.draw_idle()
