@@ -1,1 +1,3 @@
 backend/backend_qtquick5/__pycache__
+*.qmlc
+*.pyc
