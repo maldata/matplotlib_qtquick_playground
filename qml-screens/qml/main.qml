@@ -11,12 +11,18 @@ ApplicationWindow {
     height: Style.windowHeight
     title: qsTr("QML Sampler")
     onClosing: main.closeApplication()
-//    Component.onCompleted: connectToSignals()
+    Component.onCompleted: connectToSignals()
 
-//    function connectToSignals() {
-//        main.screen_changed.connect(mainWindow.changeScreen);
-//        main.engines_initialized.connect(mainWindow.enginesInitialized);
-//    }
+    function connectToSignals()
+    {
+        main.active_content_changed.connect(mainWindow.update_content_area_loader);
+        // main.engines_initialized.connect(mainWindow.enginesInitialized);
+    }
+
+    function update_content_area_loader(new_qml_path)
+    {
+        contentAreaLoader.source = new_qml_path;
+    }
 
     // The Keys property can't be attached to anything that doesn't descend from Item,
     // and apparently ApplicationWindow doesn't. So, let's just wrap everything in Item.

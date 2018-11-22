@@ -12,8 +12,13 @@ class Screen2Controller(QObject):
     def __init__(self):
         super().__init__()
 
+        self._qml_file = './screens/screen2.qml'
+
     def initialize(self):
         print('Initializing screen 2 controller')
 
     def deinitialize(self):
         print('Deinitializing screen 2 controller')
+
+    def get_qml(self):
+        return self._qml_file

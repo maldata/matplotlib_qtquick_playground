@@ -6,7 +6,7 @@ from .screen2_controller import Screen2Controller
 
 class MainController(QObject):
     # signals
-    active_content_changed = pyqtSignal()
+    active_content_changed = pyqtSignal(str)
     engines_initialized = pyqtSignal()
     screen_changed = pyqtSignal(str)
     dryer_connection_changed = pyqtSignal()
@@ -36,7 +36,8 @@ class MainController(QObject):
     def active(self, value):
         if self._active_content_controller != value:
             self._active_content_controller = value
-            self.active_content_changed.emit()
+            new_qml = self._active_content_controller.get_qml()
+            self.active_content_changed.emit(new_qml)
     
     @pyqtSlot()
     def closeApplication(self):
@@ -44,6 +45,7 @@ class MainController(QObject):
         
     def start(self):
         print("start()")
+        self.active = self._content_map["SCREEN1"]
         
     def shutdown(self):
         print("shutdown()")
@@ -65,3 +67,4 @@ class MainController(QObject):
 
         self.active = new_controller
         self.active.initialize()
+
