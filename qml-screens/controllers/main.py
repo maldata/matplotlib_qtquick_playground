@@ -35,3 +35,7 @@ class MainController(QObject):
     
         self._app.quit()
         
+    @pyqtSlot(str)
+    def changeContent(self, screen_key):
+        print("Changing to {0}".format(screen_key))
+        
