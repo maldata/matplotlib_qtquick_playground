@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
 
-from .screen1_controller import ContentArea1Controller
-from .screen2_controller import ContentArea2Controller
+from .content_area1_controller import ContentArea1Controller
+from .content_area2_controller import ContentArea2Controller
 
 
 class MainController(QObject):
@@ -15,8 +15,8 @@ class MainController(QObject):
         self._active_content_area_controller = None
 
         self._content_map = {
-            "SCREEN1": ContentArea1Controller('./screens/screen1.qml'),
-            "SCREEN2": ContentArea2Controller('./screens/screen2.qml')
+            "SCREEN1": ContentArea1Controller('./main_content_areas/content_area1.qml'),
+            "SCREEN2": ContentArea2Controller('./main_content_areas/content_area2.qml')
         }
 
     @pyqtProperty(QObject, notify=active_content_area_changed)
