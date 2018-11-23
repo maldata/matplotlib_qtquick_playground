@@ -1,13 +1,8 @@
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtProperty
 
 
 class Screen2Controller(QObject):
     # signals
-    engines_initialized = pyqtSignal()
-    screen_changed = pyqtSignal(str)
-    dryer_connection_changed = pyqtSignal()
-    alert_status_changed = pyqtSignal()
-    param_changed = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -20,5 +15,6 @@ class Screen2Controller(QObject):
     def deinitialize(self):
         print('Deinitializing screen 2 controller')
 
-    def get_qml(self):
+    @pyqtProperty(str, constant=True)
+    def qml_file(self):
         return self._qml_file

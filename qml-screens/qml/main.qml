@@ -11,18 +11,6 @@ ApplicationWindow {
     height: Style.windowHeight
     title: qsTr("QML Sampler")
     onClosing: main.closeApplication()
-    Component.onCompleted: connectToSignals()
-
-    function connectToSignals()
-    {
-        main.active_content_changed.connect(mainWindow.update_content_area_loader);
-        // main.engines_initialized.connect(mainWindow.enginesInitialized);
-    }
-
-    function update_content_area_loader(new_qml_path)
-    {
-        contentAreaLoader.source = new_qml_path;
-    }
 
     // The Keys property can't be attached to anything that doesn't descend from Item,
     // and apparently ApplicationWindow doesn't. So, let's just wrap everything in Item.
@@ -66,6 +54,10 @@ ApplicationWindow {
                 clip: true
                 Layout.fillHeight: true
                 Layout.preferredWidth: Style.contentMinWidth
+
+                // When this qml is initially loaded, main.active is still null (doesn't get set until the main controller
+                // runs the start() method), so we'll make sure that that case is covered to prevent a warning.
+                source: main.active ? main.active.qml_file : ''
             }
         }
     }
