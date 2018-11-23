@@ -57,7 +57,7 @@ ApplicationWindow {
 
                 // When this qml is initially loaded, main.active is still null (doesn't get set until the main controller
                 // runs the start() method), so we'll make sure that that case is covered to prevent a warning.
-                source: main.active ? main.active.qml_file : ''
+                source: main.active_content_area_controller ? main.active_content_area_controller.qml_file : ''
             }
         }
     }

@@ -1,20 +1,14 @@
-from PyQt5.QtCore import QObject, pyqtProperty
+from .base_content_area_controller import BaseContentAreaController
 
 
-class Screen2Controller(QObject):
+class ContentArea2Controller(BaseContentAreaController):
     # signals
 
-    def __init__(self):
-        super().__init__()
-
-        self._qml_file = './screens/screen2.qml'
+    def __init__(self, qml_file):
+        super().__init__(qml_file)
 
     def initialize(self):
         print('Initializing screen 2 controller')
 
     def deinitialize(self):
         print('Deinitializing screen 2 controller')
-
-    @pyqtProperty(str, constant=True)
-    def qml_file(self):
-        return self._qml_file
