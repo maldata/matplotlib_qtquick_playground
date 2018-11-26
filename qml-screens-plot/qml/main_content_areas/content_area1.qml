@@ -5,10 +5,17 @@ import QtQuick.Layouts 1.3
 import "../styles"
 
 Rectangle {
-    anchors.fill: parent
-    color: "blue"
+    color: "whitesmoke"
 
-    Item {
-        anchors.fill: parent
+    ColumnLayout {
+	anchors.fill: parent
+
+	Label {
+            text: "This page intentionally left blank!"
+	}
+
+	Item {
+	    Layout.fillHeight: true
+	}
     }
 }
