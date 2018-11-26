@@ -4,11 +4,15 @@ import QtQuick.Layouts 1.3
 
 import "../styles"
 
-Rectangle {
+ColumnLayout {
     anchors.fill: parent
-    color: "red"
 
+    Label {
+        text: "Here's a plot!"
+    }
+
+    // We'll replace this with our plot control.
     Item {
-        anchors.fill: parent
+    	 Layout.fillHeight: true
     }
 }
