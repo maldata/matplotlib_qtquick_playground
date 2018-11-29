@@ -4,15 +4,18 @@ import sys
 import signal
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtQml import QQmlApplicationEngine
+from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PyQt5.QtWidgets import QApplication
 
 from controllers.main import MainController
+from controllers.matplot import MatplotlibController
 
 
 def main():
     print('main()')
-
+    
+    qmlRegisterType(MatplotlibController, "Matplot", 1, 0, "Matplot")
+    
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
     main_controller = MainController(app)

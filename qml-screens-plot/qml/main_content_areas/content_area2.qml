@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
+import Matplot 1.0
+
 import "../styles"
 
 ColumnLayout {
@@ -11,8 +13,10 @@ ColumnLayout {
         text: "Here's a plot!"
     }
 
-    // We'll replace this with our plot control.
-    Item {
-    	 Layout.fillHeight: true
+    Matplot {
+    	 //Layout.fillHeight: true
+	 // For some reason this only works with explicit width and height.
+	 width: 300
+	 height: 300
     }
 }
