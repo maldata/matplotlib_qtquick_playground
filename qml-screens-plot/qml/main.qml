@@ -54,6 +54,7 @@ ApplicationWindow {
                 clip: true
                 Layout.fillHeight: true
                 Layout.preferredWidth: Style.contentMinWidth
+		Layout.fillWidth: true
 
                 // When this qml is initially loaded, main.active is still null (doesn't get set until the main controller
                 // runs the start() method), so we'll make sure that that case is covered to prevent a warning.
