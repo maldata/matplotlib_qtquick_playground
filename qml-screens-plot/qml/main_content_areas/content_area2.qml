@@ -14,9 +14,7 @@ ColumnLayout {
     }
 
     Matplot {
-    	 //Layout.fillHeight: true
-	 // For some reason this only works with explicit width and height.
-	 width: 300
-	 height: 300
+    	Layout.fillHeight: true
+	Layout.fillWidth: true
     }
 }
