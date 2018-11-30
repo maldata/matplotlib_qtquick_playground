@@ -5,8 +5,8 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PyQt5.QtGui import QGuiApplication
 
-from plotapp.controllers.window_controller import WindowController
-from plotapp.controllers.figure_controller import FigureCanvasQtQuickAgg
+from controllers.window_controller import WindowController
+from controllers.figure_controller import FigureCanvasQtQuickAgg
 
 
 def main():
