@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
+// import CustomPaintedItem 1.0
+
 ApplicationWindow {
     id: mainWindow
     visible: true
@@ -18,16 +20,17 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.preferredWidth: 200
             Layout.minimumWidth: 150
+            Layout.maximumWidth: 350
 
             Button {
                 id: buttonScreen1
-                text: "Screen 1"
+                text: "Button 1"
                 Layout.fillWidth: true
             }
 
             Button {
                 id: buttonScreen2
-                text: "Screen 2"
+                text: "Button 2"
                 Layout.fillWidth: true
             }
         }
@@ -40,5 +43,21 @@ ApplicationWindow {
 
             source: 'loaded_content.qml'
         }
+
+//        ColumnLayout {
+//            Layout.fillHeight: true
+//            Layout.preferredWidth: 520
+//            Layout.minimumWidth: 300
+
+//            Label {
+//                text: "Here's a thing!"
+//            }
+
+//            CustomPaintedItem {
+//                Layout.fillHeight: true
+//                Layout.fillWidth: true
+//            }
+//        }
+
     }
 }

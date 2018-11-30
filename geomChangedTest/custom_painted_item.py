@@ -12,4 +12,4 @@ class CustomPaintedItem(QQuickPaintedItem):
 
     def geometryChanged(self, old_geom, new_geom):
         print('OLD: {0} x {1}'.format(old_geom.width(), old_geom.height()))
-        print('NEW: {0} x {1}'.format(old_geom.width(), old_geom.height()))
+        print('NEW: {0} x {1}'.format(new_geom.width(), new_geom.height()))
