@@ -30,7 +30,7 @@ class MainController(QObject):
             self.active_content_area_changed.emit()
     
     @pyqtSlot()
-    def closeApplication(self):
+    def close_application(self):
         self.shutdown()
         
     def start(self):
@@ -43,7 +43,7 @@ class MainController(QObject):
         self._app.quit()
         
     @pyqtSlot(str)
-    def changeContent(self, screen_key):
+    def change_content(self, screen_key):
         try:
             new_controller = self._content_map[screen_key]
         except KeyError as ex:

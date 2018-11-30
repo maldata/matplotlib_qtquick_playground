@@ -195,7 +195,8 @@ class FigureCanvasQtQuickAgg(QtQuick.QQuickPaintedItem, FigureCanvasAgg):
 
     def blit(self, bbox=None):
         """
-        Blit the region in bbox
+        Overrides FigureCanvasBase.blit()
+        Blit the canvas within the bounding box bbox (defaults to the whole canvas)
         """
         # If bbox is None, blit the entire canvas. Otherwise
         # blit only the area defined by the bbox.
@@ -208,6 +209,11 @@ class FigureCanvasQtQuickAgg(QtQuick.QQuickPaintedItem, FigureCanvasAgg):
         self.repaint(l, self.renderer.height-t, w, h)       
 
     def geometryChanged(self, new_geometry, old_geometry):
+        """
+        Overrides QQuickItem.geometryChanged().
+        Must call the base class method.
+        http://doc.qt.io/qt-5/qquickitem.html#geometryChanged
+        """
         w = new_geometry.width()
         h = new_geometry.height()
         

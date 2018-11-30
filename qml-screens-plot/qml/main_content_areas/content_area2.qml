@@ -14,7 +14,7 @@ ColumnLayout {
     }
 
     Matplot {
-    	Layout.fillHeight: true
-	Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.fillWidth: true
     }
 }

@@ -10,7 +10,7 @@ ApplicationWindow {
     width: Style.windowWidth
     height: Style.windowHeight
     title: qsTr("QML Sampler")
-    onClosing: main.closeApplication()
+    onClosing: main.close_application()
 
     // The Keys property can't be attached to anything that doesn't descend from Item,
     // and apparently ApplicationWindow doesn't. So, let's just wrap everything in Item.
@@ -20,11 +20,11 @@ ApplicationWindow {
         Keys.onPressed: {
             if (event.key === Qt.Key_1)
             {
-                onPressed: main.changeContent("SCREEN1")
+                onPressed: main.change_content("SCREEN1")
             }
             else if (event.key === Qt.Key_2)
             {
-                onPressed: main.changeContent("SCREEN2")
+                onPressed: main.change_content("SCREEN2")
             }
         }
 
@@ -38,14 +38,14 @@ ApplicationWindow {
                     id: buttonScreen1
                     text: "Screen 1"
                     Layout.fillWidth: true
-                    onPressed: main.changeContent("SCREEN1")
+                    onPressed: main.change_content("SCREEN1")
                 }
 
                 Button {
                     id: buttonScreen2
                     text: "Screen 2"
                     Layout.fillWidth: true
-                    onPressed: main.changeContent("SCREEN2")
+                    onPressed: main.change_content("SCREEN2")
                 }
             }
 
