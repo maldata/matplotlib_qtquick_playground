@@ -2,8 +2,6 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
-// import CustomPaintedItem 1.0
-
 ApplicationWindow {
     id: mainWindow
     visible: true
@@ -38,26 +36,11 @@ ApplicationWindow {
         Loader {
             id: contentAreaLoader
             Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.preferredWidth: 520
             Layout.minimumWidth: 300
 
             source: 'loaded_content.qml'
         }
-
-//        ColumnLayout {
-//            Layout.fillHeight: true
-//            Layout.preferredWidth: 520
-//            Layout.minimumWidth: 300
-
-//            Label {
-//                text: "Here's a thing!"
-//            }
-
-//            CustomPaintedItem {
-//                Layout.fillHeight: true
-//                Layout.fillWidth: true
-//            }
-//        }
-
     }
 }
