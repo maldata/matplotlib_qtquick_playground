@@ -16,5 +16,7 @@ ColumnLayout {
     Matplot {
         Layout.fillHeight: true
         Layout.fillWidth: true
+
+        model: main.active_content_area_controller.sample_float
     }
 }
