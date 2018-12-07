@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, QTimer
+from PyQt5.QtCore import pyqtProperty, pyqtSignal, QTimer, QVariant
 
 from random import random
 
@@ -7,13 +7,13 @@ from .base_content_area_controller import BaseContentAreaController
 
 class ContentArea2Controller(BaseContentAreaController):
     # signals
-    sampleFloatChanged = pyqtSignal()
+    plotDataChanged = pyqtSignal()
 
     def __init__(self, qml_file):
         super().__init__(qml_file)
 
-        self._sample_float = random()
-        QTimer.singleShot(5000, self.new_thing)
+        self._plot_data = []
+        QTimer.singleShot(2000, self.new_thing)
 
     def initialize(self):
         print('Initializing screen 2 controller')
@@ -21,16 +21,16 @@ class ContentArea2Controller(BaseContentAreaController):
     def deinitialize(self):
         print('Deinitializing screen 2 controller')
 
-    @pyqtProperty(float, notify=sampleFloatChanged)
-    def sample_float(self):
-        return self._sample_float
+    @pyqtProperty(QVariant, notify=plotDataChanged)
+    def plot_data(self):
+        return self._plot_data
 
-    @sample_float.setter
-    def sample_float(self, value):
-        if self._sample_float != value:
-            self._sample_float = value
-            self.sampleFloatChanged.emit()
+    @plot_data.setter
+    def plot_data(self, value):
+        if self._plot_data != value:
+            self._plot_data = value
+            self.plotDataChanged.emit()
 
     def new_thing(self):
-        self.sample_float = random()
-        QTimer.singleShot(5000, self.new_thing)
+        self.plot_data = self.plot_data + [random()]
+        QTimer.singleShot(2000, self.new_thing)

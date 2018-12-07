@@ -1,6 +1,6 @@
 from PyQt5.QtQuick import QQuickPaintedItem
 from PyQt5.QtGui import QColor, QBrush, QPainter
-from PyQt5.QtCore import Qt, QTimer, pyqtProperty, pyqtSignal
+from PyQt5.QtCore import Qt, QTimer, QVariant, pyqtProperty, pyqtSignal
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -19,12 +19,27 @@ class MatplotlibController(QQuickPaintedItem):
         self._figure = Figure()
         self._canvas = FigureCanvasAgg(self._figure)
 
-        self._model = 0.0
+        self._axis = self._figure.add_subplot(1, 1, 1)
+
+        self._model = []
+
+        self.modelChanged.connect(self.onDataUpdate)
 
         # https://stackoverflow.com/questions/19480209/qt-quick-2-paint-method-doesnt-get-called
         # We need to call self.update() once in the constructor and then every time we need a refresh
-        QTimer.singleShot(10, self.update)
-        
+        # QTimer.singleShot(10, self.update)
+
+    @pyqtProperty(QVariant, notify=modelChanged)
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        variant = value.toVariant()
+        if self._model != variant:
+            self._model = variant
+            self.modelChanged.emit()
+
     def paint(self, painter):
         """
         Overrides QQuickPaintedItem.paint(). This creates the image in the QML item. The QQuickPaintedItem.update()
@@ -47,7 +62,7 @@ class MatplotlibController(QQuickPaintedItem):
         y = 10 + (random() * 100)
         
         painter.drawRoundedRect(x, y, width, height, 5, 5)
-        QTimer.singleShot(100, self.update)
+        # QTimer.singleShot(100, self.update)
 
     def geometryChanged(self, new_geometry, old_geometry):
         """
@@ -75,12 +90,10 @@ class MatplotlibController(QQuickPaintedItem):
         # self.draw_idle()
         # QQuickPaintedItem.geometryChanged(self, new_geometry, old_geometry)
 
-    @pyqtProperty(float, notify=modelChanged)
-    def model(self):
-        return self._model
-
-    @model.setter
-    def model(self, value):
-        if self._model != value:
-            self._model = value
-            self.modelChanged.emit()
+    def onDataUpdate(self):
+        # Probably want to throttle this a little. Maybe only draw/update once every X milliseconds?
+        self._axis.cla()
+        x = list(range(len(self.model)))
+        self._axis.plot(x, self.model)
+        self._canvas.draw()
+        self.update()
