@@ -1,6 +1,6 @@
 from PyQt5.QtQuick import QQuickPaintedItem
-from PyQt5.QtGui import QColor, QBrush, QPainter
-from PyQt5.QtCore import Qt, QTimer, QVariant, pyqtProperty, pyqtSignal
+from PyQt5.QtGui import QColor, QBrush, QPainter, QImage, QPixmap
+from PyQt5.QtCore import Qt, QTimer, QVariant, pyqtProperty, pyqtSignal, QPoint
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -18,12 +18,13 @@ class MatplotlibController(QQuickPaintedItem):
         # The canvas is what the figure gets rendered onto, and can be exported to bytes or a file.
         self._figure = Figure()
         self._canvas = FigureCanvasAgg(self._figure)
-
         self._axis = self._figure.add_subplot(1, 1, 1)
 
         self._model = []
-
         self.modelChanged.connect(self.onDataUpdate)
+
+        self._width_px = 0
+        self._height_px = 0
 
         # https://stackoverflow.com/questions/19480209/qt-quick-2-paint-method-doesnt-get-called
         # We need to call self.update() once in the constructor and then every time we need a refresh
@@ -49,6 +50,13 @@ class MatplotlibController(QQuickPaintedItem):
         http://doc.qt.io/qt-5/qquickpainteditem.html#paint
         http://doc.qt.io/qt-5/qquickpainteditem.html#update
         """
+
+        # the canvas may not have a renderer yet if this gets called before we get a
+        # change to call canvas.draw(), which happens initially.
+        # In that case, don't do anything yet.
+#        if not hasattr(self, 'renderer'):
+#            return
+
         green_color = QColor("#007430")
         brush = QBrush(green_color)
 
@@ -62,7 +70,14 @@ class MatplotlibController(QQuickPaintedItem):
         y = 10 + (random() * 100)
         
         painter.drawRoundedRect(x, y, width, height, 5, 5)
-        # QTimer.singleShot(100, self.update)
+
+        # image_bytes_argb = self._canvas.tostring_argb()
+        # image = QImage(data=image_bytes_argb, width=self._width_px,
+        #                height=self._height_px, format=QImage.Format_ARGB32)
+        # pixmap = QPixmap.fromImage(image)
+        # image_rect = image.rect()
+        # painter.eraseRect(image_rect)
+        # painter.drawPixmap(QPoint(0, 0), pixmap)
 
     def geometryChanged(self, new_geometry, old_geometry):
         """
@@ -73,10 +88,10 @@ class MatplotlibController(QQuickPaintedItem):
         super().geometryChanged(new_geometry, old_geometry)
         old_width = old_geometry.width()
         old_height = old_geometry.height()
-        new_width = new_geometry.width()
-        new_height = new_geometry.height()
+        self._width_px = new_geometry.width()
+        self._height_px = new_geometry.height()
 
-        if (new_width <= 0.0) and (new_height <= 0.0):
+        if (self._width_px <= 0.0) and (self._height_px <= 0.0):
             return
 
         # print('OLD: {0} x {1}'.format(old_width, old_height))
