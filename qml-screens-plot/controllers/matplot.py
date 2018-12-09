@@ -51,12 +51,15 @@ class MatplotlibController(QQuickPaintedItem):
         http://doc.qt.io/qt-5/qquickpainteditem.html#update
         """
         try:
-            image_bytes_argb = self._canvas.tostring_argb()
+            # image_bytes_argb = self._canvas.tostring_argb()
+            # It's not clear what the deal is here... this is supposedly in rgba order, but we specify ARGB32
+            # as the format? If it were an endianness issue, it'd need to be ABGR, not ARGB...?
+            image_bytes_rgba = self._canvas.buffer_rgba()
         except AttributeError:
             # If canvas.draw() hasn't been called yet, it'll fail to find the renderer... just move on.
             return
 
-        image = QImage(image_bytes_argb, self._width_px, self._height_px, QImage.Format_ARGB32)
+        image = QImage(image_bytes_rgba, self._width_px, self._height_px, QImage.Format_ARGB32)
         pixmap = QPixmap.fromImage(image)
         image_rect = image.rect()
         painter.eraseRect(image_rect)

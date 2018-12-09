@@ -13,7 +13,7 @@ class ContentArea2Controller(BaseContentAreaController):
         super().__init__(qml_file)
 
         self._plot_data = []
-        QTimer.singleShot(2000, self.new_thing)
+        QTimer.singleShot(500, self.new_thing)
 
     def initialize(self):
         print('Initializing screen 2 controller')
@@ -33,4 +33,4 @@ class ContentArea2Controller(BaseContentAreaController):
 
     def new_thing(self):
         self.plot_data = self.plot_data + [random()]
-        QTimer.singleShot(2000, self.new_thing)
+        QTimer.singleShot(500, self.new_thing)
