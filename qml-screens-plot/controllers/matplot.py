@@ -50,34 +50,17 @@ class MatplotlibController(QQuickPaintedItem):
         http://doc.qt.io/qt-5/qquickpainteditem.html#paint
         http://doc.qt.io/qt-5/qquickpainteditem.html#update
         """
+        try:
+            image_bytes_argb = self._canvas.tostring_argb()
+        except AttributeError:
+            # If canvas.draw() hasn't been called yet, it'll fail to find the renderer... just move on.
+            return
 
-        # the canvas may not have a renderer yet if this gets called before we get a
-        # change to call canvas.draw(), which happens initially.
-        # In that case, don't do anything yet.
-#        if not hasattr(self, 'renderer'):
-#            return
-
-        green_color = QColor("#007430")
-        brush = QBrush(green_color)
-
-        painter.setBrush(brush)
-        painter.setPen(Qt.NoPen)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        width = 20 + (random() * 50)
-        height = 20 + (random() * 50)
-        x = 10 + (random() * 100)
-        y = 10 + (random() * 100)
-        
-        painter.drawRoundedRect(x, y, width, height, 5, 5)
-
-        # image_bytes_argb = self._canvas.tostring_argb()
-        # image = QImage(data=image_bytes_argb, width=self._width_px,
-        #                height=self._height_px, format=QImage.Format_ARGB32)
-        # pixmap = QPixmap.fromImage(image)
-        # image_rect = image.rect()
-        # painter.eraseRect(image_rect)
-        # painter.drawPixmap(QPoint(0, 0), pixmap)
+        image = QImage(image_bytes_argb, self._width_px, self._height_px, QImage.Format_ARGB32)
+        pixmap = QPixmap.fromImage(image)
+        image_rect = image.rect()
+        painter.eraseRect(image_rect)
+        painter.drawPixmap(QPoint(0, 0), pixmap)
 
     def geometryChanged(self, new_geometry, old_geometry):
         """
@@ -86,24 +69,16 @@ class MatplotlibController(QQuickPaintedItem):
         http://doc.qt.io/qt-5/qquickitem.html#geometryChanged
         """
         super().geometryChanged(new_geometry, old_geometry)
-        old_width = old_geometry.width()
-        old_height = old_geometry.height()
         self._width_px = new_geometry.width()
         self._height_px = new_geometry.height()
 
         if (self._width_px <= 0.0) and (self._height_px <= 0.0):
             return
 
-        # print('OLD: {0} x {1}'.format(old_width, old_height))
-        # print('NEW: {0} x {1}'.format(new_width, new_height))
-
-        # dpival = self.figure.dpi
-        # winch = w / dpival
-        # hinch = h / dpival
-        # self.figure.set_size_inches(winch, hinch)
-        # FigureCanvasAgg.resize_event(self)
-        # self.draw_idle()
-        # QQuickPaintedItem.geometryChanged(self, new_geometry, old_geometry)
+        dpi = self._figure.get_dpi()
+        width_inch = self._width_px / dpi
+        height_inch = self._height_px / dpi
+        self._figure.set_size_inches(width_inch, height_inch)
 
     def onDataUpdate(self):
         # Probably want to throttle this a little. Maybe only draw/update once every X milliseconds?
