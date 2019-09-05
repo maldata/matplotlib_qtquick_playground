@@ -1,11 +1,9 @@
 from PySide2.QtQuick import QQuickPaintedItem
-from PySide2.QtGui import QColor, QBrush, QPainter, QImage, QPixmap
-from PySide2.QtCore import Qt, QTimer, Property, Signal, QPoint
+from PySide2.QtGui import QImage, QPixmap
+from PySide2.QtCore import Property, Signal, QPoint
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-
-from random import random
 
 
 class MatplotlibController(QQuickPaintedItem):
