@@ -4,6 +4,7 @@ from PySide2.QtCore import Property, Signal, QPoint
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from datetime import datetime
 
 
 class MatplotlibController(QQuickPaintedItem):
@@ -23,6 +24,9 @@ class MatplotlibController(QQuickPaintedItem):
 
         self._width_px = 0
         self._height_px = 0
+
+        self._last_geom_change_time = datetime.now()
+        self._disable_painting = False
 
         # https://stackoverflow.com/questions/19480209/qt-quick-2-paint-method-doesnt-get-called
         # We need to call self.update() once in the constructor and then every time we need a refresh
@@ -68,11 +72,13 @@ class MatplotlibController(QQuickPaintedItem):
         Must call the base class method.
         http://doc.qt.io/qt-5/qquickitem.html#geometryChanged
         """
-        super().geometryChanged(new_geometry, old_geometry)
+
+        self._last_geom_change_time = datetime.now()
+        self._disable_painting = True
         self._width_px = new_geometry.width()
         self._height_px = new_geometry.height()
 
-        if (self._width_px <= 0.0) and (self._height_px <= 0.0):
+        if (self._width_px <= 0.0) or (self._height_px <= 0.0):
             return
 
         dpi = self._figure.get_dpi()
@@ -80,10 +86,25 @@ class MatplotlibController(QQuickPaintedItem):
         height_inch = self._height_px / dpi
         self._figure.set_size_inches(width_inch, height_inch)
 
+        self._canvas.resize_event()
+        #self.draw_idle()  # This is from backend_qquick5agg.py :: FigureCanvasQtQuickAgg
+        # It seems like a better name might be "set_draw_pending()" because what it really does is set a flag that says
+        # that we've already told the event loop we need a redraw, and then it sets a singleshot timer so the event loop
+        # knows that we need to redraw.
+        super().geometryChanged(new_geometry, old_geometry)
+
     def onDataUpdate(self):
         # Probably want to throttle this a little. Maybe only draw/update once every X milliseconds?
-        self._axis.cla()
-        x = list(range(len(self.model)))
-        self._axis.plot(x, self.model)
-        self._canvas.draw()
-        self.update()
+
+        if self._disable_painting:
+            update_time = datetime.now()
+            time_delta = update_time - self._last_geom_change_time
+            if time_delta.seconds > 0.5:
+                self._disable_painting = False
+
+        if not self._disable_painting:
+            self._axis.cla()
+            x = list(range(len(self.model)))
+            self._axis.plot(x, self.model)
+            self._canvas.draw()
+            self.update()
