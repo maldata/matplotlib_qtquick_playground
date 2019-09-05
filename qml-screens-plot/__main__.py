@@ -1,8 +1,8 @@
 import os
 import sys
 
-from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
-from PyQt5.QtWidgets import QApplication
+from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
+from PySide2.QtWidgets import QApplication
 
 from controllers.main import MainController
 from controllers.matplot import MatplotlibController
