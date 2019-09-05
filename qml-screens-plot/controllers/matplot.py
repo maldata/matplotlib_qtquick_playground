@@ -4,7 +4,6 @@ from PySide2.QtCore import Property, Signal, QPoint
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-from datetime import datetime
 
 
 class MatplotlibController(QQuickPaintedItem):
@@ -24,10 +23,6 @@ class MatplotlibController(QQuickPaintedItem):
 
         self._width_px = 0
         self._height_px = 0
-
-        self._last_geom_change_time = datetime.now()
-        self._disable_painting = False
-
         # https://stackoverflow.com/questions/19480209/qt-quick-2-paint-method-doesnt-get-called
         # We need to call self.update() once in the constructor and then every time we need a refresh
         # QTimer.singleShot(10, self.update)
@@ -72,9 +67,6 @@ class MatplotlibController(QQuickPaintedItem):
         Must call the base class method.
         http://doc.qt.io/qt-5/qquickitem.html#geometryChanged
         """
-
-        self._last_geom_change_time = datetime.now()
-        self._disable_painting = True
         self._width_px = new_geometry.width()
         self._height_px = new_geometry.height()
 
@@ -95,16 +87,8 @@ class MatplotlibController(QQuickPaintedItem):
 
     def onDataUpdate(self):
         # Probably want to throttle this a little. Maybe only draw/update once every X milliseconds?
-
-        if self._disable_painting:
-            update_time = datetime.now()
-            time_delta = update_time - self._last_geom_change_time
-            if time_delta.seconds > 0.5:
-                self._disable_painting = False
-
-        if not self._disable_painting:
-            self._axis.cla()
-            x = list(range(len(self.model)))
-            self._axis.plot(x, self.model)
-            self._canvas.draw()
-            self.update()
+        self._axis.cla()
+        x = list(range(len(self.model)))
+        self._axis.plot(x, self.model)
+        self._canvas.draw()
+        self.update()
