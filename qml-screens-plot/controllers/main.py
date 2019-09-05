@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
+from PySide2.QtCore import QObject, Property, Signal, Slot
 
 from .content_area1_controller import ContentArea1Controller
 from .content_area2_controller import ContentArea2Controller
@@ -6,7 +6,7 @@ from .content_area2_controller import ContentArea2Controller
 
 class MainController(QObject):
     # signals
-    active_content_area_changed = pyqtSignal()
+    active_content_area_changed = Signal()
 
     def __init__(self, app):
         super().__init__()
@@ -19,30 +19,30 @@ class MainController(QObject):
             "SCREEN2": ContentArea2Controller('./main_content_areas/content_area2.qml')
         }
 
-    @pyqtProperty(QObject, notify=active_content_area_changed)
+    @Property(QObject, notify=active_content_area_changed)
     def active_content_area_controller(self):
         return self._active_content_area_controller
 
     @active_content_area_controller.setter
-    def active_content_area_controller(self, value):
+    def set_active_content_area_controller(self, value):
         if self._active_content_area_controller != value:
             self._active_content_area_controller = value
             self.active_content_area_changed.emit()
     
-    @pyqtSlot()
+    @Slot()
     def close_application(self):
         self.shutdown()
         
     def start(self):
         print("start()")
-        self.active_content_area_controller = self._content_map["SCREEN1"]
+        self.set_active_content_area_controller(self._content_map["SCREEN1"])
         
     def shutdown(self):
         print("shutdown()")
         self.active_content_area_controller.deinitialize()
         self._app.quit()
         
-    @pyqtSlot(str)
+    @Slot(str)
     def change_content(self, screen_key):
         try:
             new_controller = self._content_map[screen_key]
@@ -58,5 +58,5 @@ class MainController(QObject):
         if self.active_content_area_controller is not None:
             self.active_content_area_controller.deinitialize()
 
-        self.active_content_area_controller = new_controller
+        self.set_active_content_area_controller(new_controller)
         self.active_content_area_controller.initialize()

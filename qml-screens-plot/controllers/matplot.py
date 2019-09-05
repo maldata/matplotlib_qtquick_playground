@@ -1,6 +1,6 @@
-from PyQt5.QtQuick import QQuickPaintedItem
-from PyQt5.QtGui import QColor, QBrush, QPainter, QImage, QPixmap
-from PyQt5.QtCore import Qt, QTimer, QVariant, pyqtProperty, pyqtSignal, QPoint
+from PySide2.QtQuick import QQuickPaintedItem
+from PySide2.QtGui import QColor, QBrush, QPainter, QImage, QPixmap
+from PySide2.QtCore import Qt, QTimer, Property, Signal, QPoint
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -9,7 +9,7 @@ from random import random
 
 
 class MatplotlibController(QQuickPaintedItem):
-    modelChanged = pyqtSignal()
+    modelChanged = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -30,15 +30,14 @@ class MatplotlibController(QQuickPaintedItem):
         # We need to call self.update() once in the constructor and then every time we need a refresh
         # QTimer.singleShot(10, self.update)
 
-    @pyqtProperty(QVariant, notify=modelChanged)
+    @Property(list, notify=modelChanged)
     def model(self):
         return self._model
 
     @model.setter
-    def model(self, value):
-        variant = value.toVariant()
-        if self._model != variant:
-            self._model = variant
+    def set_model(self, value):
+        if self._model != value:
+            self._model = value
             self.modelChanged.emit()
 
     def paint(self, painter):

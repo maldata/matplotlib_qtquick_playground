@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject, pyqtProperty
+from PySide2.QtCore import QObject, Property
 
 
 class BaseContentAreaController(QObject):
@@ -15,6 +15,6 @@ class BaseContentAreaController(QObject):
     def deinitialize(self):
         raise NotImplementedError
 
-    @pyqtProperty(str, constant=True)
+    @Property(str, constant=True)
     def qml_file(self):
         return self._qml_file
