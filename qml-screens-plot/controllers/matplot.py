@@ -1,6 +1,6 @@
 from PySide2.QtQuick import QQuickPaintedItem
 from PySide2.QtGui import QImage, QPixmap
-from PySide2.QtCore import Property, Signal, QPoint
+from PySide2.QtCore import Property, Signal, QPoint, QTimer
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -18,14 +18,16 @@ class MatplotlibController(QQuickPaintedItem):
         self._canvas = FigureCanvasAgg(self._figure)
         self._axis = self._figure.add_subplot(1, 1, 1)
 
+        self._draw_pending = False
+
         self._model = []
-        self.modelChanged.connect(self.onDataUpdate)
+        self.modelChanged.connect(self._set_draw_pending)
 
         self._width_px = 0
         self._height_px = 0
         # https://stackoverflow.com/questions/19480209/qt-quick-2-paint-method-doesnt-get-called
         # We need to call self.update() once in the constructor and then every time we need a refresh
-        # QTimer.singleShot(10, self.update)
+        QTimer.singleShot(0, self.update)
 
     @Property(list, notify=modelChanged)
     def model(self):
@@ -76,19 +78,27 @@ class MatplotlibController(QQuickPaintedItem):
         dpi = self._figure.get_dpi()
         width_inch = self._width_px / dpi
         height_inch = self._height_px / dpi
+#        print('width: {0} \t\t height: {1}'.format(width_inch, height_inch))
         self._figure.set_size_inches(width_inch, height_inch)
 
         self._canvas.resize_event()
-        #self.draw_idle()  # This is from backend_qquick5agg.py :: FigureCanvasQtQuickAgg
-        # It seems like a better name might be "set_draw_pending()" because what it really does is set a flag that says
-        # that we've already told the event loop we need a redraw, and then it sets a singleshot timer so the event loop
-        # knows that we need to redraw.
+        self._set_draw_pending()
         super().geometryChanged(new_geometry, old_geometry)
 
-    def onDataUpdate(self):
+    def _set_draw_pending(self):
+        if self._draw_pending:
+            return
+        self._draw_pending = True
+        QTimer.singleShot(0, self._on_plot_update)
+
+    def _on_plot_update(self):
         # Probably want to throttle this a little. Maybe only draw/update once every X milliseconds?
+        self._draw_pending = False
+        if (self._width_px <= 0.0) or (self._height_px <= 0.0):
+            return
+
         self._axis.cla()
         x = list(range(len(self.model)))
         self._axis.plot(x, self.model)
-        self._canvas.draw()
-        self.update()
+        self._canvas.draw()  # draw the canvas
+        self.update()        # update the QQuickPaintedItem
