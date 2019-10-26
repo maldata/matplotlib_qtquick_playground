@@ -1,4 +1,0 @@
-# This file is needed to make this directory a QML module.
-# http://doc.qt.io/qt-5/qtqml-modules-qmldir.html
-
-singleton Style 1.0 style.qml
