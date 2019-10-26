@@ -4,7 +4,7 @@ import sys
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide2.QtWidgets import QApplication
 
-from controllers.main import MainController
+from controllers.main_controller import MainController
 from controllers.matplot import MatplotlibController
 
 
