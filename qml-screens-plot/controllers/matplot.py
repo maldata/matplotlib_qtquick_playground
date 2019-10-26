@@ -58,10 +58,11 @@ class MatplotlibController(QQuickPaintedItem):
             return
 
         image = QImage(image_bytes_rgba, self._width_px, self._height_px, QImage.Format_ARGB32)
-        pixmap = QPixmap.fromImage(image)
+        # TODO: when this is uncommented, we crash when resizing.
+#        pixmap = QPixmap.fromImage(image)
         image_rect = image.rect()
         painter.eraseRect(image_rect)
-        painter.drawPixmap(QPoint(0, 0), pixmap)
+#        painter.drawPixmap(QPoint(0, 0), pixmap)
 
     def geometryChanged(self, new_geometry, old_geometry):
         """
